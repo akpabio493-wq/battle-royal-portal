@@ -1,0 +1,7 @@
+node_modules/
+.vite/
+dist/
+build/
+.manus-logs/
+.DS_Store
+*.log

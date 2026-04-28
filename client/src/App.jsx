@@ -1,4 +1,10 @@
 function App() {
-  return <h1>404 is gone! 🎉</h1>
+  return (
+    <div style={{padding: '50px', textAlign: 'center'}}>
+      <h1>404 IS GONE NANA! 🎉</h1>
+      <p>Your app is working now</p>
+    </div>
+  )
 }
+
 export default App

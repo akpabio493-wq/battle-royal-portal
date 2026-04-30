@@ -2,10 +2,574 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Fixed</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Battle Royale Portal</title>
+    <!-- Cyberpunk Typography: Space Mono for headings, Roboto Mono for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Roboto Mono', monospace;
+        background: #0a0e27;
+        color: #00f0ff;
+        overflow-x: hidden;
+      }
+
+      /* Cyberpunk Neon Colors */
+      :root {
+        --neon-cyan: #00f0ff;
+        --neon-magenta: #ff006e;
+        --neon-lime: #39ff14;
+        --dark-bg: #0a0e27;
+        --card-bg: #1a1f3a;
+      }
+
+      /* Hero Section */
+      .hero {
+        min-height: 100vh;
+        background: linear-gradient(135deg, rgba(0, 240, 255, 0.1) 0%, rgba(255, 0, 110, 0.1) 100%),
+                    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(0,240,255,0.1)" stroke-width="1"/></pattern></defs><rect width="1200" height="800" fill="%230a0e27"/><rect width="1200" height="800" fill="url(%23grid)"/></svg>');
+        background-size: cover;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+          linear-gradient(90deg, transparent 0%, rgba(0, 240, 255, 0.05) 50%, transparent 100%),
+          linear-gradient(180deg, transparent 0%, rgba(255, 0, 110, 0.05) 100%);
+        pointer-events: none;
+        animation: scanlines 8s linear infinite;
+      }
+
+      @keyframes scanlines {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(10px); }
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        max-width: 900px;
+      }
+
+      h1 {
+        font-family: 'Space Mono', monospace;
+        font-size: 4rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+        animation: glow 3s ease-in-out infinite;
+      }
+
+      @keyframes glow {
+        0%, 100% { text-shadow: 0 0 20px rgba(0, 240, 255, 0.5); }
+        50% { text-shadow: 0 0 40px rgba(0, 240, 255, 0.8), 0 0 60px rgba(255, 0, 110, 0.5); }
+      }
+
+      .subtitle {
+        font-size: 1.2rem;
+        color: var(--neon-cyan);
+        margin-bottom: 2rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+
+      .cta-buttons {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 3rem;
+      }
+
+      button {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        font-family: 'Space Mono', monospace;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        border: 2px solid;
+        background: transparent;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn-primary {
+        border-color: var(--neon-lime);
+        color: var(--neon-lime);
+        background: rgba(57, 255, 20, 0.1);
+        box-shadow: 0 0 10px rgba(57, 255, 20, 0.5), inset 0 0 10px rgba(57, 255, 20, 0.2);
+      }
+
+      .btn-primary:hover {
+        box-shadow: 0 0 20px rgba(57, 255, 20, 0.8), inset 0 0 20px rgba(57, 255, 20, 0.4);
+        transform: scale(1.05);
+      }
+
+      .btn-secondary {
+        border-color: var(--neon-cyan);
+        color: var(--neon-cyan);
+        background: rgba(0, 240, 255, 0.05);
+        box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+      }
+
+      .btn-secondary:hover {
+        box-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
+        transform: scale(1.05);
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .stat-card {
+        padding: 1.5rem;
+        border: 2px solid var(--neon-cyan);
+        background: rgba(0, 240, 255, 0.05);
+        box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+        border-radius: 8px;
+      }
+
+      .stat-card:nth-child(2) {
+        border-color: var(--neon-magenta);
+        background: rgba(255, 0, 110, 0.05);
+        box-shadow: 0 0 15px rgba(255, 0, 110, 0.3);
+      }
+
+      .stat-card:nth-child(3) {
+        border-color: var(--neon-lime);
+        background: rgba(57, 255, 20, 0.05);
+        box-shadow: 0 0 15px rgba(57, 255, 20, 0.3);
+      }
+
+      .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-label {
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        opacity: 0.8;
+      }
+
+      .scroll-indicator {
+        text-align: center;
+        margin-top: 2rem;
+        animation: bounce 2s infinite;
+      }
+
+      @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(10px); }
+      }
+
+      /* Game Modes Section */
+      .game-modes {
+        padding: 4rem 2rem;
+        background: var(--dark-bg);
+      }
+
+      .section-title {
+        font-family: 'Space Mono', monospace;
+        font-size: 2.5rem;
+        text-align: center;
+        margin-bottom: 3rem;
+        color: var(--neon-cyan);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+
+      .modes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .mode-card {
+        padding: 2rem;
+        border: 2px solid var(--neon-cyan);
+        background: var(--card-bg);
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+      }
+
+      .mode-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+        border-color: var(--neon-magenta);
+      }
+
+      .mode-card:nth-child(2) {
+        border-color: var(--neon-magenta);
+      }
+
+      .mode-card:nth-child(3) {
+        border-color: var(--neon-lime);
+      }
+
+      .mode-title {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .mode-description {
+        font-size: 0.9rem;
+        opacity: 0.8;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+      }
+
+      .mode-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        font-size: 0.85rem;
+      }
+
+      .mode-stat {
+        padding: 0.5rem;
+        background: rgba(0, 240, 255, 0.1);
+        border-left: 2px solid var(--neon-cyan);
+        padding-left: 0.75rem;
+      }
+
+      .mode-card:nth-child(2) .mode-stat {
+        background: rgba(255, 0, 110, 0.1);
+        border-left-color: var(--neon-magenta);
+      }
+
+      .mode-card:nth-child(3) .mode-stat {
+        background: rgba(57, 255, 20, 0.1);
+        border-left-color: var(--neon-lime);
+      }
+
+      .enter-btn {
+        width: 100%;
+        padding: 0.75rem;
+        background: rgba(0, 240, 255, 0.1);
+        border: 1px solid var(--neon-cyan);
+        color: var(--neon-cyan);
+        font-family: 'Space Mono', monospace;
+        font-weight: 700;
+        text-transform: uppercase;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+      }
+
+      .enter-btn:hover {
+        background: rgba(0, 240, 255, 0.2);
+        box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+      }
+
+      .mode-card:nth-child(2) .enter-btn {
+        background: rgba(255, 0, 110, 0.1);
+        border-color: var(--neon-magenta);
+        color: var(--neon-magenta);
+      }
+
+      .mode-card:nth-child(2) .enter-btn:hover {
+        background: rgba(255, 0, 110, 0.2);
+        box-shadow: 0 0 10px rgba(255, 0, 110, 0.5);
+      }
+
+      .mode-card:nth-child(3) .enter-btn {
+        background: rgba(57, 255, 20, 0.1);
+        border-color: var(--neon-lime);
+        color: var(--neon-lime);
+      }
+
+      .mode-card:nth-child(3) .enter-btn:hover {
+        background: rgba(57, 255, 20, 0.2);
+        box-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+      }
+
+      /* Features Section */
+      .features {
+        padding: 4rem 2rem;
+        background: linear-gradient(135deg, rgba(0, 240, 255, 0.05) 0%, rgba(255, 0, 110, 0.05) 100%);
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .feature-item {
+        padding: 2rem;
+        border-left: 3px solid var(--neon-cyan);
+        background: rgba(0, 240, 255, 0.05);
+        border-radius: 4px;
+      }
+
+      .feature-item:nth-child(2) {
+        border-left-color: var(--neon-magenta);
+        background: rgba(255, 0, 110, 0.05);
+      }
+
+      .feature-item:nth-child(3) {
+        border-left-color: var(--neon-lime);
+        background: rgba(57, 255, 20, 0.05);
+      }
+
+      .feature-title {
+        font-family: 'Space Mono', monospace;
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .feature-description {
+        font-size: 0.9rem;
+        opacity: 0.8;
+        line-height: 1.6;
+      }
+
+      /* Footer */
+      footer {
+        padding: 2rem;
+        text-align: center;
+        border-top: 1px solid rgba(0, 240, 255, 0.2);
+        background: var(--dark-bg);
+        font-size: 0.9rem;
+        opacity: 0.7;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 2.5rem;
+        }
+
+        .cta-buttons {
+          flex-direction: column;
+        }
+
+        button {
+          width: 100%;
+        }
+
+        .section-title {
+          font-size: 1.8rem;
+        }
+      }
+    </style>
   </head>
+
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1>BATTLE ROYALE PORTAL</h1>
+        <p class="subtitle">Enter the digital arena. Compete. Survive. Dominate.</p>
+
+        <div class="cta-buttons">
+          <button class="btn-primary">⚡ LAUNCH GAME</button>
+          <button class="btn-secondary">VIEW LEADERBOARD</button>
+        </div>
+
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-value">1.2M</div>
+            <div class="stat-label">Active Players</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">847K</div>
+            <div class="stat-label">Matches Today</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">$2.5M</div>
+            <div class="stat-label">Prize Pool</div>
+          </div>
+        </div>
+
+        <div class="scroll-indicator">
+          <p>SCROLL TO EXPLORE</p>
+          <p>↓</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Game Modes Section -->
+    <section class="game-modes">
+      <h2 class="section-title">GAME MODES</h2>
+
+      <div class="modes-grid">
+        <!-- Squad Mode -->
+        <div class="mode-card">
+          <h3 class="mode-title">SQUAD</h3>
+          <p class="mode-description">Team up with 3 friends and dominate the arena together. Communication and strategy are key.</p>
+          <div class="mode-stats">
+            <div class="mode-stat">
+              <strong>Team Size:</strong> 4 Players
+            </div>
+            <div class="mode-stat">
+              <strong>Duration:</strong> 20 min
+            </div>
+            <div class="mode-stat">
+              <strong>Players:</strong> 100
+            </div>
+            <div class="mode-stat">
+              <strong>Difficulty:</strong> Hard
+            </div>
+          </div>
+          <button class="enter-btn">ENTER ARENA</button>
+        </div>
+
+        <!-- Duos Mode -->
+        <div class="mode-card">
+          <h3 class="mode-title">DUOS</h3>
+          <p class="mode-description">Partner with one ally and prove your coordination. Fast-paced action awaits.</p>
+          <div class="mode-stats">
+            <div class="mode-stat">
+              <strong>Team Size:</strong> 2 Players
+            </div>
+            <div class="mode-stat">
+              <strong>Duration:</strong> 15 min
+            </div>
+            <div class="mode-stat">
+              <strong>Players:</strong> 50
+            </div>
+            <div class="mode-stat">
+              <strong>Difficulty:</strong> Medium
+            </div>
+          </div>
+          <button class="enter-btn">ENTER ARENA</button>
+        </div>
+
+        <!-- Solo Mode -->
+        <div class="mode-card">
+          <h3 class="mode-title">SOLO</h3>
+          <p class="mode-description">Go alone against the world. Only the strongest survive in this ultimate test.</p>
+          <div class="mode-stats">
+            <div class="mode-stat">
+              <strong>Team Size:</strong> 1 Player
+            </div>
+            <div class="mode-stat">
+              <strong>Duration:</strong> 12 min
+            </div>
+            <div class="mode-stat">
+              <strong>Players:</strong> 25
+            </div>
+            <div class="mode-stat">
+              <strong>Difficulty:</strong> Easy
+            </div>
+          </div>
+          <button class="enter-btn">ENTER ARENA</button>
+        </div>
+
+        <!-- Ranked Mode -->
+        <div class="mode-card">
+          <h3 class="mode-title">RANKED</h3>
+          <p class="mode-description">Climb the ranks and earn exclusive rewards. Compete against the best players.</p>
+          <div class="mode-stats">
+            <div class="mode-stat">
+              <strong>Team Size:</strong> 4 Players
+            </div>
+            <div class="mode-stat">
+              <strong>Duration:</strong> 25 min
+            </div>
+            <div class="mode-stat">
+              <strong>Players:</strong> 100
+            </div>
+            <div class="mode-stat">
+              <strong>Difficulty:</strong> Extreme
+            </div>
+          </div>
+          <button class="enter-btn">ENTER ARENA</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+      <h2 class="section-title">ADVANCED FEATURES</h2>
+
+      <div class="features-grid">
+        <div class="feature-item">
+          <h3 class="feature-title">REAL-TIME MATCHMAKING</h3>
+          <p class="feature-description">Instant queue times with intelligent skill-based matchmaking. Find your perfect opponents in seconds.</p>
+        </div>
+
+        <div class="feature-item">
+          <h3 class="feature-title">DYNAMIC ZONES</h3>
+          <p class="feature-description">Unpredictable shrinking zones keep the action intense. Every match is unique and challenging.</p>
+        </div>
+
+        <div class="feature-item">
+          <h3 class="feature-title">LEADERBOARD SYSTEM</h3>
+          <p class="feature-description">Track your progress and compete globally. Earn badges and climb to the top ranks.</p>
+        </div>
+
+        <div class="feature-item">
+          <h3 class="feature-title">SEASONAL EVENTS</h3>
+          <p class="feature-description">Limited-time events with exclusive rewards. New challenges every season.</p>
+        </div>
+
+        <div class="feature-item">
+          <h3 class="feature-title">CUSTOM LOADOUTS</h3>
+          <p class="feature-description">Build your perfect arsenal. Hundreds of weapons and gear combinations available.</p>
+        </div>
+
+        <div class="feature-item">
+          <h3 class="feature-title">CROSS-PLATFORM PLAY</h3>
+          <p class="feature-description">Play with friends on any device. Seamless experience across all platforms.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2026 Battle Royale Portal. All rights reserved. | Powered by Cyberpunk Technology</p>
+    </footer>
   </body>
 </html>
